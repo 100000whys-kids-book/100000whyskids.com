@@ -43,11 +43,12 @@
 </script>
 <script>
 /* ===== Free Myth-Buster Cards: settings =====
-   entry         'hard' = the page stays hidden until the visitor leaves first name and email
+   entry         'hard' = the page stays hidden until the visitor leaves first name, email and age
+                          (the public site uses 'hard')
                  'soft' = the same window, with a small "No thanks, show me the book" link
                  'off'  = no window on arrival
-                 Per link: add ?gate=hard, ?gate=soft or ?gate=off to the page address (two ad sets,
-                 for example). ?gate=reset forgets this browser's sign-up so you can test again.
+                 The page address can't change this. ?gate=reset forgets this browser's sign-up
+                 so you can test again.
    beforeAmazon  true = visitors who haven't signed up see the bonus window when they click Buy on Amazon
    exitIntent    true = on desktop, the bonus window opens once when the mouse leaves the page
    heroLead      true = the free cards become the main button at the top (paid ads); also ?hero=lead
@@ -62,8 +63,9 @@
                  for visitors whose browser sends Global Privacy Control or Do Not Track. No tracker
                  runs before a visitor's age is known (COPPA). Their sign-up is then sent to Meta as
                  a Lead event (no names or emails are sent).
-   Age question  visitors must give their age; anyone under 18 sees a message and nothing about
-                 them is sent or stored (COPPA). The choice is remembered in their browser. */
+   Age question  visitors must give their age; anyone under 18 sees an "ask a parent" message, can't
+                 open the page, and nothing about them is sent or stored (COPPA). Their browser
+                 remembers the answer for 24 hours, so the age can't simply be changed and resent. */
 window.LEADS = {
   entry: 'hard',
   beforeAmazon: true,
@@ -79,20 +81,19 @@ window.LEADS = {
   page: 'v2.1'
 };
 (function () {
-  var L = window.LEADS, d = document.documentElement, q = location.search, mode = L.entry, gk = 'whys-gate-' + (L.page || 'page');
+  var L = window.LEADS, d = document.documentElement, q = location.search, mode = L.entry;
   d.classList.add('js');
   try {
-    var m = q.match(/[?&]gate=(hard|soft|off|reset)(?=&|$)/);
-    if (m && m[1] === 'reset') { localStorage.removeItem('whys-lead'); localStorage.removeItem('whys-minor'); localStorage.removeItem('whys-ads'); }
-    else if (m) localStorage.setItem(gk, m[1]);
-    mode = localStorage.getItem(gk) || mode;
+    if (/[?&]gate=reset(?=&|$)/.test(q)) ['whys-lead', 'whys-minor', 'whys-ads'].forEach(function (k) { localStorage.removeItem(k); });
     if (localStorage.getItem('whys-lead')) d.classList.add('has-lead');
-    if (localStorage.getItem('whys-minor')) d.classList.add('is-minor');
+    var minorAt = +localStorage.getItem('whys-minor') || 0;
+    if (minorAt && Date.now() - minorAt < 864e5) d.classList.add('is-minor'); else if (minorAt) localStorage.removeItem('whys-minor');
   } catch (e) {}
   if (/[?&]hero=lead(?=&|$)/.test(q)) L.heroLead = true;
   L.mode = mode;
   if (L.heroLead) d.classList.add('hero-lead');
-  d.classList.add(!d.classList.contains('has-lead') && !d.classList.contains('is-minor') && (mode === 'hard' || mode === 'soft') ? 'gate-open' : 'unlocked');
+  // only grown-ups who signed up see the page; everyone else, under-18s included, stays at the sign-up window
+  d.classList.add((mode === 'hard' || mode === 'soft') && !d.classList.contains('has-lead') ? 'gate-open' : 'unlocked');
 })();
 </script>
 <style>
@@ -507,6 +508,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .ticket-main { padding: clamp(1.6rem, 4.5vw, 3.1rem); }
 .ticket-main p.copy { color: var(--night-soft); margin-top: .9rem; max-width: 52ch; }
 .ticket .h2 { color: var(--night-ink); }
+.ticket .fineprint { color: var(--night-soft); }
 .ticket-stub { padding: clamp(1.6rem, 4.5vw, 3.1rem); display: grid; align-content: center; gap: .7rem; border-top: 3px dashed var(--night-line); }
 @media (min-width: 900px) { .ticket-stub { border-top: 0; } }
 .stub-label { font-family: var(--font-display); font-size: 1.15rem; letter-spacing: .06em; text-transform: uppercase; color: var(--gold); }
@@ -627,6 +629,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .lead-done { display: grid; gap: .75rem; }
 .done-hi { font-family: var(--font-display); font-size: clamp(1.6rem, 3.4vw, 2.15rem); line-height: 1.1; color: var(--gold); outline: none; }
 .done-sub, .done-note { color: var(--night-soft); }
+.lf-minor .done-tip a { color: var(--night-ink); text-decoration: underline; text-underline-offset: 3px; }
 .done-note[hidden] { display: none; }
 .done-actions { display: grid; gap: .65rem; }
 .done-actions .btn-ghost { justify-content: center; }
@@ -809,8 +812,8 @@ html.ads-ask .footer { padding-bottom: calc(var(--ads-h, 150px) + 40px); }
         </form>
         <div class="lf-minor" hidden>
           <p class="done-hi" tabindex="-1">Thanks for stopping by!</p>
-          <p class="done-sub">The free cards are for grown-ups. Please ask a parent or guardian to get them for you.</p>
-          <div class="done-actions"><button type="button" class="btn-ghost js-minor-ok">Look inside the book →</button></div>
+          <p class="done-sub">This page and the free cards are for grown-ups. Please ask a parent or guardian to check it out.</p>
+          <p class="done-tip"><a class="js-privacy" href="privacy.html#children">How we protect children's privacy</a></p>
         </div>
         <div class="lead-done" hidden>
           <p class="done-hi" tabindex="-1">Here you go, <span class="js-name">friend</span>!</p>
@@ -1642,7 +1645,7 @@ html.ads-ask .footer { padding-bottom: calc(var(--ads-h, 150px) + 40px); }
     try { if (typeof window.gtag === 'function') window.gtag('event', name === 'Lead' ? 'generate_lead' : name, data); } catch (e) {}
   }
   document.querySelectorAll('.js-dl').forEach(a => a.setAttribute('href', L.pdf || a.getAttribute('href')));
-  if (L.privacyUrl) document.querySelectorAll('.js-privacy').forEach(a => { a.href = L.privacyUrl; a.hidden = false; });
+  if (L.privacyUrl) document.querySelectorAll('.js-privacy').forEach(a => { const h = a.getAttribute('href').split('#')[1]; a.href = L.privacyUrl + (h ? '#' + h : ''); a.hidden = false; });
   fillNames();
 
   function saveLead(name, email, source) {
@@ -1681,7 +1684,7 @@ html.ads-ask .footer { padding-bottom: calc(var(--ads-h, 150px) + 40px); }
   // under 18: nothing is sent or stored except a note in this browser that the sign-up isn't for them
   function markMinor(form) {
     form.reset();
-    store.set('whys-minor', '1');
+    store.set('whys-minor', String(Date.now()));
     root.classList.add('is-minor');
     if (typeof window.fbq === 'function') store.set('whys-ads', 'no');
     ['adsConsent', 'adsSettings'].forEach(id => { const el = byId(id); if (el) el.hidden = true; });
@@ -1705,9 +1708,15 @@ html.ads-ask .footer { padding-bottom: calc(var(--ads-h, 150px) + 40px); }
 
   /* welcome gate */
   const gate = byId('gate'), gateForm = gate.querySelector('.lead-form'), gateSkip = gate.querySelector('.gate-skip');
+  function showMinor() {
+    gateForm.hidden = true; gateSkip.hidden = L.mode !== 'soft';
+    const mb = gate.querySelector('.lf-minor'); mb.hidden = false;
+    return mb;
+  }
   if (root.classList.contains('gate-open')) {
     setInert(true);
     gateSkip.hidden = L.mode !== 'soft';
+    if (isMinor()) showMinor();
     requestAnimationFrame(() => gate.focus({ preventScroll: true }));
   }
   function enterPage() {
@@ -1724,8 +1733,7 @@ html.ads-ask .footer { padding-bottom: calc(var(--ads-h, 150px) + 40px); }
     const v = readForm(gateForm); if (!v) return;
     if (v.minor) {
       markMinor(gateForm);
-      gateForm.hidden = true; gateSkip.hidden = true;
-      const mb = gate.querySelector('.lf-minor'); mb.hidden = false; mb.querySelector('.done-hi').focus({ preventScroll: true });
+      showMinor().querySelector('.done-hi').focus({ preventScroll: true });
       return;
     }
     saveLead(v.name, v.email, 'gate');
@@ -1733,7 +1741,6 @@ html.ads-ask .footer { padding-bottom: calc(var(--ads-h, 150px) + 40px); }
     const box = gate.querySelector('.lead-done'); box.hidden = false; box.querySelector('.done-hi').focus({ preventScroll: true });
   });
   gate.querySelector('.js-enter').addEventListener('click', enterPage);
-  gate.querySelector('.js-minor-ok').addEventListener('click', enterPage);
   gateSkip.addEventListener('click', enterPage);
 
   /* bonus window */
@@ -1871,9 +1878,7 @@ html.ads-ask .footer { padding-bottom: calc(var(--ads-h, 150px) + 40px); }
   if (window.claude && typeof window.claude.use === 'function') {
     window.claude.use('user').then(async u => {
       if (!u || !(await u.isOwner())) return;
-      const bar = byId('ownerBar'), sel = byId('ownerMode');
-      sel.value = L.mode; bar.hidden = false;
-      sel.addEventListener('change', () => { store.set('whys-gate-' + (L.page || 'page'), sel.value); ['whys-lead', 'whys-minor', 'whys-ads'].forEach(store.del); try { sessionStorage.clear(); } catch (e) {} location.reload(); });
+      byId('ownerBar').hidden = false;
       byId('ownerReset').addEventListener('click', () => { ['whys-lead', 'whys-minor', 'whys-ads'].forEach(store.del); try { sessionStorage.clear(); } catch (e) {} location.reload(); });
     }).catch(() => {});
   }
