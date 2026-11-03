@@ -1,0 +1,74 @@
+{
+  "source": "https://www.amazon.com/dp/B0HH9YSD8H",
+  "asOf": "2026-11-03",
+  "rating": 4.8,
+  "ratingsCount": 11,
+  "histogram": {
+    "5": 88,
+    "4": 0,
+    "3": 12,
+    "2": 0,
+    "1": 0
+  },
+  "prices": {
+    "paperback": "$19.90",
+    "hardcover": "$36.90",
+    "kindle": "$6.90"
+  },
+  "reviews": [
+    {
+      "name": "Michael",
+      "stars": 5,
+      "verified": true,
+      "format": "Paperback",
+      "date": "2026-10-07",
+      "title": "My kids can't stop asking to read it!",
+      "text": "This encyclopedia has become a bedtime favorite at our house. The full-colour illustrations are bright and engaging, and the questions are exactly the kind my kids actually ask, like why the sky is blue and how planets form. The explanations are simple enough for young readers but never feel dumbed down. The pages are sturdy and the layout makes it easy to flip around and pick a topic. It's sparked so many great conversations, and it makes a perfect gift."
+    },
+    {
+      "name": "Lana B.",
+      "stars": 5,
+      "verified": true,
+      "format": "Hardcover",
+      "date": "2026-10-10",
+      "title": "Fun and informative!",
+      "text": "Got this for my kids ages 5-8 and they love it. The illustrations are colorful and keep them engaged, and the facts are genuinely interesting, even I learned a few things. Great way to answer all those endless \"why\" questions in a fun, easy to understand way. Highly recommend!"
+    },
+    {
+      "name": "Odailin H.",
+      "stars": 5,
+      "verified": true,
+      "format": "Paperback",
+      "date": "2026-09-27",
+      "title": "Very creative and fun book for kids",
+      "text": "I bought this book for my daughter and my niece, and they absolutely love it. It is super entertaining, full of color, and answers their questions in a clear and fun way. They have a great time reading it, so I highly recommend it!"
+    },
+    {
+      "name": "Crystal J.",
+      "stars": 5,
+      "verified": true,
+      "format": "Paperback",
+      "date": "2026-10-09",
+      "title": "Fun and interesting",
+      "text": "Interesting book for kids. I have a very curious 4 year old and i have been reading it to her one page at a time and have a fun and interesting conversation everytime. We love it."
+    },
+    {
+      "name": "Grinch",
+      "stars": 5,
+      "verified": true,
+      "format": "Paperback",
+      "date": "2026-10-04",
+      "title": "Amazing",
+      "text": "My little ones love it. 🧸✨😊 Learning through interesting things with pictures is finally the easy way to explain the whys kids keep asking. 📚🎨💡"
+    },
+    {
+      "name": "Gino G.",
+      "stars": 5,
+      "verified": true,
+      "format": "Paperback",
+      "date": "2026-09-29",
+      "title": "Fun and interesting!",
+      "text": "This is such a cool book, I’m going to save it for a Christmas present but my kids will absolutely love it!"
+    }
+  ]
+}
