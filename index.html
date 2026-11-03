@@ -826,7 +826,7 @@ html.ads-ask .footer { padding-bottom: calc(var(--ads-h, 150px) + 40px); }
         </div>
         <button type="button" class="link-btn gate-skip" hidden>No thanks, show me the book</button>
       </div>
-      <p class="gate-proof"><img src="images/cover-360.jpg" alt="" width="28" height="37"><span><b>★ 4.3</b> out of 5 on Amazon · 11 ratings</span><span>Paperback · Hardcover · Kindle</span></p>
+      <p class="gate-proof"><img src="images/cover-360.jpg" alt="" width="28" height="37"><span><b>★ <span data-amz="rating">4.8</span></b> out of 5 on Amazon · <span data-amz="count" data-tpl="{n} ratings" data-tpl1="{n} rating">11 ratings</span></span><span>Paperback · Hardcover · Kindle</span></p>
     </div>
   </div>
 </div>
@@ -879,18 +879,18 @@ html.ads-ask .footer { padding-bottom: calc(var(--ads-h, 150px) + 40px); }
       </h1>
       <p class="lead load" style="--d:4">104 of the big questions kids really ask, each on its own full-colour illustrated page, with an answer that grows with your child.</p>
       <a class="rating load" style="--d:5" href="#reviews">
-        <span class="stars" role="img" aria-label="Rated 4.3 out of 5 stars">
+        <span class="stars" role="img" aria-label="Rated 4.8 out of 5 stars" data-amz="stars">
           <svg class="bg" viewBox="0 0 120 24" aria-hidden="true"><use href="#star5"/></svg>
-          <span class="fg" style="width:86%"><svg viewBox="0 0 120 24" aria-hidden="true"><use href="#star5"/></svg></span>
+          <span class="fg" style="width:96%"><svg viewBox="0 0 120 24" aria-hidden="true"><use href="#star5"/></svg></span>
         </span>
-        <span>4.3 out of 5</span><span class="muted-n">11 ratings on Amazon</span>
+        <span><span data-amz="rating">4.8</span> out of 5</span><span class="muted-n" data-amz="count" data-tpl="{n} ratings on Amazon" data-tpl1="{n} rating on Amazon">11 ratings on Amazon</span>
       </a>
       <div class="fmt-wrap load" style="--d:6">
         <p class="hand fmt-note" aria-hidden="true">pick your edition!</p>
         <div class="fmt" role="radiogroup" aria-label="Choose a format">
-          <button type="button" role="radio" aria-checked="true" data-format="paperback"><span>Paperback</span><strong>$19.90</strong></button>
-          <button type="button" role="radio" aria-checked="false" data-format="hardcover"><span>Hardcover</span><strong>$36.90</strong></button>
-          <button type="button" role="radio" aria-checked="false" data-format="kindle"><span>Kindle</span><strong><small>from</small> $6.90</strong></button>
+          <button type="button" role="radio" aria-checked="true" data-format="paperback"><span>Paperback</span><strong data-price="paperback">$19.90</strong></button>
+          <button type="button" role="radio" aria-checked="false" data-format="hardcover"><span>Hardcover</span><strong data-price="hardcover">$36.90</strong></button>
+          <button type="button" role="radio" aria-checked="false" data-format="kindle"><span>Kindle</span><strong><small>from</small> <span data-price="kindle">$6.90</span></strong></button>
         </div>
         <div class="cta-stack">
         <a class="btn-amazon btn-pulse buy-hero js-buy" href="https://www.amazon.com/dp/B0HH9YSD8H" target="_blank" rel="noopener">
@@ -905,7 +905,7 @@ html.ads-ask .footer { padding-bottom: calc(var(--ads-h, 150px) + 40px); }
         <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span>Full colour on all 130 pages</li>
         <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span>Ages 5–10</li>
       </ul>
-      <p class="fineprint load" style="--d:8">Prices shown were on Amazon.com on October 28, 2026 and may change.</p>
+      <p class="fineprint load" style="--d:8">Prices shown were on Amazon.com on <span data-amz="date">November 3, 2026</span> and may change.</p>
     </div>
   </div>
   <div class="clouds" aria-hidden="true"></div>
@@ -919,7 +919,7 @@ html.ads-ask .footer { padding-bottom: calc(var(--ads-h, 150px) + 40px); }
       <li class="burst" style="--bc:#E0730C;--r:5deg"><span class="burst-shape"><b class="num" data-count="24">24</b></span><span class="lbl">myths busted</span></li>
       <li class="burst" style="--bc:#1286C2;--r:-3deg"><span class="burst-shape"><b class="num" data-count="130">130</b></span><span class="lbl">full-colour pages</span></li>
       <li class="burst" style="--bc:#23914F;--r:6deg"><span class="burst-shape"><b class="num" data-count="8">8</b></span><span class="lbl">worlds to explore</span></li>
-      <li class="burst" style="--bc:#8B4DEB;--r:-5deg"><span class="burst-shape"><b class="num" data-count="4.3" data-decimals="1">4.3</b></span><span class="lbl">out of 5 on Amazon</span></li>
+      <li class="burst" style="--bc:#8B4DEB;--r:-5deg"><span class="burst-shape"><b class="num" data-amz="rating-num" data-count="4.8" data-decimals="1">4.8</b></span><span class="lbl">out of 5 on Amazon</span></li>
     </ul>
   </div>
 </div>
@@ -1192,27 +1192,27 @@ html.ads-ask .footer { padding-bottom: calc(var(--ads-h, 150px) + 40px); }
       <aside class="rating-card card-stars reveal" aria-label="Amazon rating summary">
         <p class="fineprint" style="font-weight:700;letter-spacing:.1em;text-transform:uppercase">Customer reviews on Amazon</p>
         <div class="rc-top">
-          <span class="rc-burst"><b>4.3</b></span>
+          <span class="rc-burst"><b data-amz="rating">4.8</b></span>
           <div>
-            <span class="stars" role="img" aria-label="Rated 4.3 out of 5 stars">
+            <span class="stars" role="img" aria-label="Rated 4.8 out of 5 stars" data-amz="stars">
               <svg class="bg" viewBox="0 0 120 24" aria-hidden="true"><use href="#star5"/></svg>
-              <span class="fg" style="width:86%"><svg viewBox="0 0 120 24" aria-hidden="true"><use href="#star5"/></svg></span>
+              <span class="fg" style="width:96%"><svg viewBox="0 0 120 24" aria-hidden="true"><use href="#star5"/></svg></span>
             </span>
             <p style="font-weight:700;margin-top:.3rem">out of 5</p>
-            <p class="fineprint" style="font-size:.86rem">11 global ratings</p>
+            <p class="fineprint" style="font-size:.86rem" data-amz="count" data-tpl="{n} global ratings" data-tpl1="{n} global rating">11 global ratings</p>
           </div>
         </div>
         <div class="hist" aria-label="Rating breakdown">
-          <div class="hist-row"><span>5 star</span><span class="hist-track"><span class="hist-fill" style="width:76%"></span></span><span>76%</span></div>
-          <div class="hist-row"><span>4 star</span><span class="hist-track"><span class="hist-fill" style="width:0%"></span></span><span>0%</span></div>
-          <div class="hist-row"><span>3 star</span><span class="hist-track"><span class="hist-fill" style="width:12%"></span></span><span>12%</span></div>
-          <div class="hist-row"><span>2 star</span><span class="hist-track"><span class="hist-fill" style="width:0%"></span></span><span>0%</span></div>
-          <div class="hist-row"><span>1 star</span><span class="hist-track"><span class="hist-fill" style="width:12%"></span></span><span>12%</span></div>
+          <div class="hist-row" data-hist="5"><span>5 star</span><span class="hist-track"><span class="hist-fill" style="width:88%"></span></span><span>88%</span></div>
+          <div class="hist-row" data-hist="4"><span>4 star</span><span class="hist-track"><span class="hist-fill" style="width:0%"></span></span><span>0%</span></div>
+          <div class="hist-row" data-hist="3"><span>3 star</span><span class="hist-track"><span class="hist-fill" style="width:12%"></span></span><span>12%</span></div>
+          <div class="hist-row" data-hist="2"><span>2 star</span><span class="hist-track"><span class="hist-fill" style="width:0%"></span></span><span>0%</span></div>
+          <div class="hist-row" data-hist="1"><span>1 star</span><span class="hist-track"><span class="hist-fill" style="width:0%"></span></span><span>0%</span></div>
         </div>
         <p style="margin-top:1.3rem"><a class="text-link" href="https://www.amazon.com/product-reviews/B0HH9YSD8H" target="_blank" rel="noopener">Read all reviews on Amazon</a></p>
-        <p class="fineprint" style="margin-top:.8rem">As shown on Amazon.com on October 28, 2026.</p>
+        <p class="fineprint" style="margin-top:.8rem">As shown on Amazon.com on <span data-amz="date">November 3, 2026</span>.</p>
       </aside>
-      <div class="reviews-grid card-stars">
+      <div class="reviews-grid card-stars" id="reviewsGrid">
         <article class="review reveal">
           <span class="stars" role="img" aria-label="5 out of 5 stars"><svg class="bg" viewBox="0 0 120 24" aria-hidden="true"><use href="#star5"/></svg><span class="fg" style="width:100%"><svg viewBox="0 0 120 24" aria-hidden="true"><use href="#star5"/></svg></span></span>
           <h3>My kids can't stop asking to read it!</h3>
@@ -1273,7 +1273,7 @@ html.ads-ask .footer { padding-bottom: calc(var(--ads-h, 150px) + 40px); }
       </details>
       <details>
         <summary><span class="qb" aria-hidden="true">?</span>Paperback, hardcover or Kindle: which should I choose?<span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary>
-        <p class="answer">The paperback ($19.90) is a big 8.5 × 11 in book. The hardcover ($36.90) has a sturdy laminated hard cover, a lovely choice for a gift. The Kindle edition (from $6.90) arrives instantly; its full-colour pages look best on a colour screen such as a tablet or the Kindle app.</p>
+        <p class="answer">The paperback (<span data-price="paperback">$19.90</span>) is a big 8.5 × 11 in book. The hardcover (<span data-price="hardcover">$36.90</span>) has a sturdy laminated hard cover, a lovely choice for a gift. The Kindle edition (from <span data-price="kindle">$6.90</span>) arrives instantly; its full-colour pages look best on a colour screen such as a tablet or the Kindle app.</p>
       </details>
       <details>
         <summary><span class="qb" aria-hidden="true">?</span>How is each page organised?<span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></summary>
@@ -1299,9 +1299,9 @@ html.ads-ask .footer { padding-bottom: calc(var(--ads-h, 150px) + 40px); }
         <h2 class="title-3d" id="final-title">Give every “why?” a real answer.</h2>
         <p class="sub">104 big questions · 130 full-colour pages · ages 5–10 · myth-busters &amp; quizzes inside</p>
         <div class="buy-row">
-          <a class="btn-amazon btn-pulse" data-buy="paperback" href="https://www.amazon.com/dp/B0HH9YSD8H" target="_blank" rel="noopener">Paperback · $19.90</a>
-          <a class="btn-ghost" data-buy="hardcover" href="https://www.amazon.com/dp/B0HJGJ82BP" target="_blank" rel="noopener">Hardcover · $36.90</a>
-          <a class="btn-ghost" data-buy="kindle" href="https://www.amazon.com/dp/B0HH4TXCX5" target="_blank" rel="noopener">Kindle · from $6.90</a>
+          <a class="btn-amazon btn-pulse" data-buy="paperback" href="https://www.amazon.com/dp/B0HH9YSD8H" target="_blank" rel="noopener">Paperback · <span data-price="paperback">$19.90</span></a>
+          <a class="btn-ghost" data-buy="hardcover" href="https://www.amazon.com/dp/B0HJGJ82BP" target="_blank" rel="noopener">Hardcover · <span data-price="hardcover">$36.90</span></a>
+          <a class="btn-ghost" data-buy="kindle" href="https://www.amazon.com/dp/B0HH4TXCX5" target="_blank" rel="noopener">Kindle · from <span data-price="kindle">$6.90</span></a>
         </div>
         <p class="fineprint" style="margin-top:1rem">All buttons open the book's page on Amazon.com.</p>
       </div>
@@ -1319,7 +1319,7 @@ html.ads-ask .footer { padding-bottom: calc(var(--ads-h, 150px) + 40px); }
       <p style="margin-top:.6rem">Copyright © 2026. All rights reserved.</p>
     </div>
     <div>
-      <p>Prices, formats and ratings on this page were taken from Amazon.com on October 28, 2026 and may change. The price you pay is the one shown on Amazon at checkout.</p>
+      <p>Prices, formats and ratings on this page were taken from Amazon.com on <span data-amz="date">November 3, 2026</span> and may change. The price you pay is the one shown on Amazon at checkout.</p>
       <p style="margin-top:.6rem">Amazon, Kindle and all related marks are trademarks of Amazon.com, Inc. or its affiliates.</p>
     </div>
   </div>
@@ -1435,6 +1435,71 @@ html.ads-ask .footer { padding-bottom: calc(var(--ads-h, 150px) + 40px); }
     });
   });
   setFormat('paperback');
+
+  /* ---------- live Amazon figures ----------
+     data/amazon.json holds the rating, the number of ratings, the rating breakdown, the prices and a
+     selection of 5-star verified reviews as shown on Amazon.com, with the date they were taken. A daily
+     scheduled task refreshes it; the figures written in this page are only used if that file can't be read. */
+  const fmtDate = s => {
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || ''); if (!m) return '';
+    return new Date(Date.UTC(+m[1], +m[2] - 1, +m[3])).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+  };
+  const okPrice = p => typeof p === 'string' && /^\$\d{1,4}(\.\d{2})?$/.test(p);
+  const STARS5 = '<svg class="bg" viewBox="0 0 120 24" aria-hidden="true"><use href="#star5"/></svg><span class="fg" style="width:100%"><svg viewBox="0 0 120 24" aria-hidden="true"><use href="#star5"/></svg></span>';
+  const CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
+  function renderReviews(list) {
+    const grid = document.getElementById('reviewsGrid'); if (!grid) return;
+    // only 5-star verified purchases, as the section's heading says
+    const keep = list.filter(v => v && v.stars === 5 && v.verified === true && typeof v.name === 'string' && v.name.trim() && typeof v.text === 'string' && v.text.trim()).slice(0, 9);
+    if (!keep.length) return;
+    const frag = document.createDocumentFragment();
+    keep.forEach(v => {
+      const a = document.createElement('article'); a.className = 'review';
+      const st = document.createElement('span'); st.className = 'stars'; st.setAttribute('role', 'img'); st.setAttribute('aria-label', '5 out of 5 stars'); st.innerHTML = STARS5; a.append(st);
+      if (typeof v.title === 'string' && v.title.trim()) { const h = document.createElement('h3'); h.textContent = v.title; a.append(h); }
+      const p = document.createElement('p'); p.className = 'body'; p.textContent = v.text; a.append(p);
+      const m = document.createElement('p'); m.className = 'meta';
+      const who = document.createElement('span'); who.className = 'who'; who.textContent = v.name; m.append(who);
+      if (typeof v.format === 'string' && v.format) { const f = document.createElement('span'); f.textContent = v.format; m.append(f); }
+      const ver = document.createElement('span'); ver.className = 'verified'; ver.innerHTML = CHECK; ver.append('Verified Purchase'); m.append(ver);
+      const dt = fmtDate(v.date); if (dt) { const s = document.createElement('span'); s.textContent = dt; m.append(s); }
+      a.append(m); frag.append(a);
+    });
+    grid.replaceChildren(frag);
+  }
+  function applyAmazon(d) {
+    if (!d || typeof d !== 'object') return;
+    const r = Number(d.rating), n = Number(d.ratingsCount), date = fmtDate(d.asOf);
+    if (r >= 1 && r <= 5) {
+      const rs = r.toFixed(1);
+      document.querySelectorAll('[data-amz="rating"]').forEach(el => { el.textContent = rs; });
+      document.querySelectorAll('[data-amz="rating-num"]').forEach(el => { el.dataset.count = rs; el.textContent = rs; });
+      document.querySelectorAll('[data-amz="stars"]').forEach(el => {
+        el.setAttribute('aria-label', `Rated ${rs} out of 5 stars`);
+        const fg = el.querySelector('.fg'); if (fg) fg.style.width = (r / 5 * 100).toFixed(1) + '%';
+      });
+    }
+    if (Number.isInteger(n) && n >= 0) document.querySelectorAll('[data-amz="count"]').forEach(el => { el.textContent = (n === 1 ? el.dataset.tpl1 : el.dataset.tpl).replace('{n}', n.toLocaleString('en-US')); });
+    if (d.histogram && typeof d.histogram === 'object') document.querySelectorAll('[data-hist]').forEach(row => {
+      const v = Number(d.histogram[row.dataset.hist]); if (!(v >= 0 && v <= 100)) return;
+      row.querySelector('.hist-fill').style.width = v + '%'; row.lastElementChild.textContent = v + '%';
+    });
+    if (date) document.querySelectorAll('[data-amz="date"]').forEach(el => { el.textContent = date; });
+    const pr = d.prices || {};
+    Object.keys(FORMATS).forEach(f => {
+      if (!okPrice(pr[f])) return;
+      FORMATS[f].price = (f === 'kindle' ? 'from ' : '') + pr[f];
+      document.querySelectorAll(`[data-price="${f}"]`).forEach(el => { el.textContent = pr[f]; });
+    });
+    const picked = radios.find(b => b.getAttribute('aria-checked') === 'true');
+    setFormat(picked ? picked.dataset.format : 'paperback');
+    try {
+      const ld = document.querySelector('script[type="application/ld+json"]'), j = JSON.parse(ld.textContent);
+      if (okPrice(pr.paperback)) { j.offers.price = pr.paperback.slice(1); ld.textContent = JSON.stringify(j, null, 2); }
+    } catch (e) {}
+    if (Array.isArray(d.reviews) && d.reviews.length) renderReviews(d.reviews);
+  }
+  fetch('data/amazon.json', { cache: 'no-cache' }).then(res => (res.ok ? res.json() : null)).then(applyAmazon).catch(() => {});
 
   /* ---------- hero gallery, with a gentle tilt under the pointer ---------- */
   const heroImg = document.getElementById('heroImg');
