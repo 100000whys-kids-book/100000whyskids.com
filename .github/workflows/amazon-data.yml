@@ -1,0 +1,53 @@
+# Every day, refresh the Amazon rating, number of ratings, star breakdown and prices shown on
+# https://100000whyskids.com (data/amazon.json). Runs on GitHub's servers, so no computer needs to be on.
+# Needs the APIFY_TOKEN repository secret (Settings → Secrets and variables → Actions).
+name: Update Amazon figures
+
+on:
+  schedule:
+    - cron: '17 11 * * *'   # every day at 11:17 UTC (12:17 in Italy in winter, 13:17 in summer)
+  workflow_dispatch:         # "Run workflow" button for a manual update
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: amazon-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read the Amazon figures and update data/amazon.json
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+        run: python3 scripts/update_amazon_data.py
+
+      - name: Save the new figures
+        id: save
+        run: |
+          if git diff --quiet -- data/amazon.json; then
+            echo "Nothing to save."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          msg=$(python3 -c 'import json; d = json.load(open("data/amazon.json")); print(f"Amazon figures as of {d[\"asOf\"]}: {d[\"rating\"]} out of 5, {d[\"ratingsCount\"]} ratings")')
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/amazon.json
+          git commit -m "$msg"
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Publish the site
+        if: steps.save.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -fsS -X POST -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/pages/builds" || echo "GitHub Pages will publish on its own."
