@@ -541,6 +541,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .review p.body { margin-top: .45rem; color: var(--ink); }
 .review .meta { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem .6rem; margin-top: .95rem; font-size: .82rem; color: var(--ink-soft); }
 .review .who { font-weight: 700; color: var(--ink); }
+.hist[hidden] { display: none; }
 .verified { display: inline-flex; align-items: center; gap: .3rem; color: var(--ok); font-weight: 700; }
 .verified svg { width: 14px; height: 14px; }
 
@@ -1484,6 +1485,7 @@ html.ads-ask .footer { padding-bottom: calc(var(--ads-h, 150px) + 40px); }
       const v = Number(d.histogram[row.dataset.hist]); if (!(v >= 0 && v <= 100)) return;
       row.querySelector('.hist-fill').style.width = v + '%'; row.lastElementChild.textContent = v + '%';
     });
+    else if (d.histogram === null) document.querySelectorAll('.hist').forEach(h => { h.hidden = true; });   // no breakdown today: hide it rather than show old numbers
     if (date) document.querySelectorAll('[data-amz="date"]').forEach(el => { el.textContent = date; });
     const pr = d.prices || {};
     Object.keys(FORMATS).forEach(f => {
