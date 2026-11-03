@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """Refreshes data/amazon.json with the book's current Amazon.com figures: average rating, number of
-ratings, star breakdown and the three prices. GitHub Actions runs it every day (.github/workflows/
-amazon-data.yml). The figures come from Apify's Amazon Product Scraper (junglee/amazon-crawler), with the
-APIFY_TOKEN repository secret. The reviews already in the file are kept as they are.
+ratings, star breakdown, the three prices and any new 5-star verified reviews. GitHub Actions runs it
+every day (.github/workflows/amazon-data.yml). The figures come from Apify's Amazon Product Scraper
+(junglee/amazon-crawler), with the APIFY_TOKEN repository secret.
 
 Nothing is written when the secret is missing, when the request fails or when a value looks wrong:
-the page then keeps showing the last good figures with their date."""
+the page then keeps showing the last good figures with their date. Reviews already in the file are
+never changed; new 5-star verified ones from the United States are added on top, and past 9 reviews
+only the 9 most recent are kept."""
 import datetime
 import json
 import os
@@ -17,7 +19,10 @@ import zoneinfo
 DATA = os.environ.get('AMAZON_DATA', 'data/amazon.json')
 ENDPOINT = os.environ.get('APIFY_ENDPOINT', 'https://api.apify.com/v2/acts/junglee~amazon-crawler/run-sync-get-dataset-items?timeout=280')
 ASINS = {'paperback': 'B0HH9YSD8H', 'hardcover': 'B0HJGJ82BP', 'kindle': 'B0HH4TXCX5'}
+LABELS = {'paperback': 'Paperback', 'hardcover': 'Hardcover', 'kindle': 'Kindle'}
+NAME_KEYS = ('author', 'username', 'userName', 'reviewerName', 'reviewer', 'profileName', 'name')
 REFRESH_DAYS = 7   # rewrite the file at least this often, so the date on the page stays recent
+MAX_REVIEWS = 9    # the page shows at most 9
 
 
 def stop(message):
@@ -60,6 +65,80 @@ def breakdown(raw):
     return hist
 
 
+def clean(v):
+    return v.strip() if isinstance(v, str) else ''
+
+
+def review_name(r):
+    for k in NAME_KEYS:
+        v = r.get(k)
+        if isinstance(v, dict):
+            v = v.get('name')
+        if clean(v):
+            return clean(v)
+    return ''
+
+
+def review_date(r):
+    d = clean(r.get('date'))
+    if re.fullmatch(r'\d{4}-\d{2}-\d{2}', d[:10]):
+        return d[:10]
+    m = re.search(r'([A-Z][a-z]+ \d{1,2}, \d{4})', f"{clean(r.get('reviewedIn'))} {d}")   # "... on October 7, 2026"
+    if m:
+        try:
+            return datetime.datetime.strptime(m.group(1), '%B %d, %Y').date().isoformat()
+        except ValueError:
+            pass
+    return ''
+
+
+def review_format(r, page_asin):
+    variant = clean(r.get('variant') or r.get('format')).lower()
+    for label in LABELS.values():
+        if label.lower() in variant:
+            return label
+    asin = clean(r.get('productAsin')).upper() or page_asin
+    return next((LABELS[f] for f, a in ASINS.items() if a == asin), '')
+
+
+def reviews_from(items):
+    """5-star verified reviews from the United States shown on the book's Amazon pages, as the page needs them."""
+    found, fields = [], set()
+    for item in items:
+        for r in item.get('productPageReviews') or []:
+            if not isinstance(r, dict):
+                continue
+            fields.update(r.keys())
+            try:
+                stars = float(r.get('ratingScore', r.get('rating', r.get('stars'))))
+            except (TypeError, ValueError):
+                continue
+            where = clean(r.get('reviewedIn'))
+            if stars != 5 or r.get('isVerified', r.get('verified')) is not True or (where and 'United States' not in where):
+                continue
+            title = re.sub(r'^\d(\.\d)? out of 5 stars\s*', '', clean(r.get('reviewTitle') or r.get('title')))
+            text = re.sub(r'\s*Read more$', '', clean(r.get('reviewDescription') or r.get('text')))
+            rev = {'name': review_name(r), 'stars': 5, 'verified': True, 'format': review_format(r, asin_of(item)),
+                   'date': review_date(r), 'title': title, 'text': text}
+            if rev['name'] and rev['date'] and rev['text']:
+                found.append(rev)
+    return found, fields
+
+
+def merge_reviews(current, found):
+    """New reviews go on top, newest first; past 9 reviews, the 9 most recent are kept."""
+    have = {(r.get('name'), r.get('date')) for r in current if isinstance(r, dict)}
+    fresh = []
+    for r in sorted(found, key=lambda r: r['date'], reverse=True):
+        if (r['name'], r['date']) not in have:
+            have.add((r['name'], r['date']))
+            fresh.append(r)
+    merged = fresh + current
+    if len(merged) > MAX_REVIEWS:
+        merged = sorted(merged, key=lambda r: str(r.get('date', '')), reverse=True)[:MAX_REVIEWS]
+    return merged, [r for r in fresh if r in merged]
+
+
 def main():
     token = os.environ.get('APIFY_TOKEN', '').strip()
     if not token:
@@ -82,7 +161,8 @@ def main():
         stop(f'Apify request failed ({type(e).__name__}): nothing updated.')
     if not isinstance(items, list):
         stop('Unexpected answer from Apify: nothing updated.')
-    by_asin = {asin_of(i): i for i in items if isinstance(i, dict) and asin_of(i)}
+    items = [i for i in items if isinstance(i, dict)]
+    by_asin = {asin_of(i): i for i in items if asin_of(i)}
 
     book = by_asin.get(ASINS['paperback'])
     if not book:
@@ -103,11 +183,18 @@ def main():
 
     hist = breakdown(book.get('starsBreakdown'))     # None hides the breakdown rather than showing old numbers
 
+    old_reviews = [r for r in current.get('reviews') or [] if isinstance(r, dict)]
+    found, fields = reviews_from(items)
+    reviews, added = merge_reviews(old_reviews, found)
+    if fields:
+        print(f"Review fields from Apify: {', '.join(sorted(fields))}")
+    print(f'Reviews: {len(found)} five-star verified on the Amazon pages today, {len(added)} new.')
+
     today = datetime.datetime.now(zoneinfo.ZoneInfo('Europe/Rome')).date()
     new = dict(current)
-    new.update(asOf=today.isoformat(), rating=rating, ratingsCount=count, histogram=hist, prices=prices)
+    new.update(asOf=today.isoformat(), rating=rating, ratingsCount=count, histogram=hist, prices=prices, reviews=reviews)
 
-    unchanged = all(new.get(k) == current.get(k) for k in ('rating', 'ratingsCount', 'histogram', 'prices'))
+    unchanged = all(new.get(k) == current.get(k) for k in ('rating', 'ratingsCount', 'histogram', 'prices', 'reviews'))
     try:
         age = (today - datetime.date.fromisoformat(current.get('asOf', ''))).days
     except ValueError:
@@ -118,6 +205,8 @@ def main():
         return
     with open(DATA, 'w', encoding='utf-8') as f:
         f.write(json.dumps(new, ensure_ascii=False, indent=2) + '\n')
+    for r in added:
+        print(f"New review: {r['name']}, {r['date']}, {r['format'] or 'format not shown'}: {r['title']}")
     print(f'Updated {DATA}: {summary}.')
 
 
